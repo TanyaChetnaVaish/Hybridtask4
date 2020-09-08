@@ -1,0 +1,28 @@
+Launch an Linux instance
+SSH connect to this instance
+Run following commands :
+  sudo su - root
+  yum update -y
+  amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+  yum install -y httpd mariadb-server
+  systemctl start httpd
+  systemctl enable httpd
+  sudo usermod -a -G apache ec2-user
+  sudo chown -R ec2-user:apache /var/www
+  sudo chmod 2775 /var/www && find /var/www -type d -exec sudo chmod 2775 {} \;
+  find /var/www -type f -exec sudo chmod 0664 {} \;
+  sytemctl start mariadb
+  mysql_secure_installation
+[Set password and set everything else Y]
+  mysql -u root -p   <--Creating database
+  CREATE DATABASE `wp_db`;  [Can give any database name]
+  USE wp_db;
+  exit;
+
+
+Open the mariadb conf file located at /etc/my.cnf
+Under the [mysqld] statement, add the following line:  skip-grant-tables
+Run the following commands:
+  sudo systemctl restart mariadb
+  sudo systemctl enable mariadb
+  sudo systemctl restart httpd
